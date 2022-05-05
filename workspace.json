@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "auth": "libs/auth",
     "customer-portal": "apps/customer-portal",
     "customer-portal-e2e": "apps/customer-portal-e2e"
   }
