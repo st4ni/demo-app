@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { RouterModule, Route } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@demo-app/layout';
+import { AuthGuard } from '@demo-app/auth';
 
 const Routes: Route[] = [
   { path: '', pathMatch: 'full', redirectTo: 'products' },
@@ -13,6 +14,7 @@ const Routes: Route[] = [
     path: 'products',
     loadChildren: () =>
       import('@demo-app/products').then((module) => module.ProductsModule),
+    canActivate: [AuthGuard],
   },
 ];
 
