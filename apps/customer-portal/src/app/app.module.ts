@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import {AuthModule, authRoutes} from '@demo-app/auth';
 import { AppComponent } from './app.component';
 import { RouterModule, Route } from '@angular/router';
-
+import { LayoutModule } from '@demo-app/layout';
 
 const Routes: Route[] = [{ path: 'auth', children: authRoutes }];
 
@@ -12,7 +12,8 @@ const Routes: Route[] = [{ path: 'auth', children: authRoutes }];
   imports: [
     BrowserModule,
     RouterModule.forRoot(Routes, { initialNavigation: 'enabledBlocking' }),
-    AuthModule
+    AuthModule,
+    LayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent],
