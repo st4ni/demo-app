@@ -1,11 +1,20 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {AuthModule, authRoutes} from '@demo-app/auth';
+import { AuthModule, authRoutes } from '@demo-app/auth';
 import { AppComponent } from './app.component';
 import { RouterModule, Route } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@demo-app/layout';
 
-const Routes: Route[] = [{ path: 'auth', children: authRoutes }];
+const Routes: Route[] = [
+  { path: '', pathMatch: 'full', redirectTo: 'products' },
+  { path: 'auth', children: authRoutes },
+  {
+    path: 'products',
+    loadChildren: () =>
+      import('@demo-app/products').then((module) => module.ProductsModule),
+  },
+];
 
 @NgModule({
   declarations: [AppComponent],
@@ -13,7 +22,8 @@ const Routes: Route[] = [{ path: 'auth', children: authRoutes }];
     BrowserModule,
     RouterModule.forRoot(Routes, { initialNavigation: 'enabledBlocking' }),
     AuthModule,
-    LayoutModule
+    LayoutModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

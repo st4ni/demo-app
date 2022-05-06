@@ -6,6 +6,7 @@
     "customer-portal-e2e": "apps/customer-portal-e2e",
     "data-models": "libs/data-models",
     "layout": "libs/layout",
-    "material": "libs/material"
+    "material": "libs/material",
+    "products": "libs/products"
   }
 }
