@@ -6,7 +6,7 @@ import { User } from '@demo-app/data-models';
 @Component({
   selector: 'demo-app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.sass'],
+  styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
   user$ = new Observable<User>();
