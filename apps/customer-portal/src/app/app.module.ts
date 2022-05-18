@@ -13,7 +13,7 @@ import { environment } from '../environments/environment';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 const Routes: Route[] = [
-  { path: '', pathMatch: 'full', redirectTo: 'products' },
+  { path: '', pathMatch: 'full', redirectTo: 'auth/login' },
   { path: 'auth', children: authRoutes },
   {
     path: 'products',

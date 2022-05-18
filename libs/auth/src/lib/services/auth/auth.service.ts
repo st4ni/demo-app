@@ -13,7 +13,8 @@ export class AuthService {
     id: 0,
     country: "",
     token: "",
-    role: ""
+    role: "",
+    type: ""
   });
   user$ = this.userSubject$.asObservable();
   constructor(private httpClient: HttpClient) {
