@@ -6,22 +6,33 @@ import { map, tap } from 'rxjs/operators';
 import { AuthActionTypes } from './auth.actions';
 import * as AuthActions from './auth.actions';
 import { AuthService } from './../services/auth/auth.service';
-
+import { of } from 'rxjs';
+import { concatMap, catchError } from 'rxjs/operators';
 @Injectable()
 export class AuthEffects {
-  login$ = createEffect(() =>
+
+  login2$ = createEffect( () =>
     this.actions$.pipe(
-      ofType(AuthActionTypes.Login),
-      fetch({
-        run: (action) => {
-          return this.authService.login(action);
-        },
-        onError: (action, error) => {
-          return AuthActions.loginFailure(error);
-        },
-      })
+      ofType(AuthActions.login),
+      concatMap( (action) => this.authService.login(action.payload)),
+      map(user => AuthActions.loginSuccess({ payload: user} )),
+      catchError( error => of(AuthActions.loginFailure({ payload: error}))
     )
-  );
+  ));
+
+  // login$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(AuthActionTypes.Login),
+  //     fetch({
+  //       run: (action) => {
+  //         return this.authService.login(action);
+  //       },
+  //       onError: (action, error) => {
+  //         return AuthActions.loginFailure(error);
+  //       },
+  //     })
+  //   )
+  // );
 
   navigateToProfile$ = createEffect(
     () =>

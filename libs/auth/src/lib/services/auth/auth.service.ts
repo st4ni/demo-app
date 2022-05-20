@@ -1,4 +1,4 @@
-import { Injectable, ɵɵsanitizeUrlOrResourceUrl } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Authenticate, User } from '@demo-app/data-models';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -25,6 +25,7 @@ export class AuthService {
   }
 
   login(authenticate: Authenticate): Observable<User> {
+    console.log('login service', authenticate);
     return this.httpClient.post<User>(
       'http://localhost:3000/login',
       authenticate

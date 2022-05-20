@@ -12,9 +12,15 @@ export class AppComponent {
   title = 'app';
 
   constructor(private store: Store<AuthState>) {
-    const user = JSON.parse(localStorage.getItem('user') ?? '');
-    if (user) {
+    const localSt = localStorage.getItem('user');
+    console.log('localstorage', localStorage.getItem('user'));
+    if (localSt) {
+      const user = JSON.parse(localStorage.getItem('user') ?? '');
       this.store.dispatch(AuthActions.loginSuccess(user));
     }
+    // const user = JSON.parse(localStorage.getItem('user') ?? '');
+    // if (user) {
+    //   this.store.dispatch(AuthActions.loginSuccess(user));
+    // }
   }
 }
