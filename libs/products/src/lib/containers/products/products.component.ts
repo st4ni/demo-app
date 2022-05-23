@@ -1,12 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+// import { Component, OnInit } from '@angular/core';
 
+// @Component({
+//   selector: 'demo-app-products',
+//   templateUrl: './products.component.html',
+//   styleUrls: ['./products.component.scss'],
+// })
+// export class ProductsComponent implements OnInit {
+//   constructor() {}
+
+//   ngOnInit(): void {}
+// }
+
+import { Component, OnInit } from '@angular/core';
+import { ProductsState } from './../../+state/products.reducer';
+import { Store, select } from '@ngrx/store';
+import { productsQuery } from './../../+state/products.selectors';
+import { Observable } from 'rxjs';
+import { Product } from '@demo-app/data-models';
+import { loadProducts } from './../../+state/products.actions';
 @Component({
   selector: 'demo-app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
-  constructor() {}
+  products$ = new Observable<Product[]>();
 
-  ngOnInit(): void {}
+  constructor(private store: Store<ProductsState>) {}
+
+  ngOnInit() {
+    this.store.dispatch(loadProducts());
+    this.products$ = this.store.pipe(select(productsQuery.getProducts));
+  }
 }
