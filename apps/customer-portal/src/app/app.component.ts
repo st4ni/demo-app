@@ -17,6 +17,8 @@ export class AppComponent {
     if (localSt) {
       const user = JSON.parse(localStorage.getItem('user') ?? '');
       this.store.dispatch(AuthActions.loginSuccess(user));
+      console.log('dispatched loging from app component');
+
     }
     // const user = JSON.parse(localStorage.getItem('user') ?? '');
     // if (user) {

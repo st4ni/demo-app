@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductsState } from './../../+state/products.reducer';
+import { Store, select } from '@ngrx/store';
+import * as  productsQuery  from './../../+state/products.selectors';
+import { Observable } from 'rxjs';
+import { Product } from '@demo-app/data-models';
+import { loadProducts } from './../../+state/products.actions';
 
 @Component({
   selector: 'demo-app-products',
@@ -6,7 +12,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
-  constructor() {}
+  products$?: Observable<any[]>;
 
-  ngOnInit(): void {}
+  constructor(private store: Store<ProductsState>) {}
+
+  ngOnInit() {
+    this.store.dispatch(loadProducts());
+    this.products$ = this.store.pipe(select(productsQuery.getAllProducts));
+  }
 }
