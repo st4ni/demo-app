@@ -1,6 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { ProductsEntity } from './products.models';
 import * as ProductsActions from './products.actions';
 import { Product } from '@demo-app/data-models';
 
@@ -11,10 +10,10 @@ export const PRODUCTS_FEATURE_KEY = 'products';
  *  - ProductsState, and
  *  - productsReducer
  */
-export interface ProductsData {
+export interface ProductsData extends EntityState<Product> {
+  selectedProductId?: string | number;
   loading: boolean;
-  products: Product[];
-  error: '';
+  error?: string | null;
 }
 
 /**
@@ -25,21 +24,17 @@ export interface ProductsState {
   readonly products: ProductsData;
 }
 
-export interface State extends EntityState<ProductsEntity> {
-  selectedId?: string | number;
-  loaded: boolean;
-  error?: string | null;
-}
-
 export interface ProductsPartialState {
-  readonly [PRODUCTS_FEATURE_KEY]: State;
+  readonly [PRODUCTS_FEATURE_KEY]: ProductsState;
 }
 
-export const productsAdapter: EntityAdapter<ProductsEntity> = createEntityAdapter<ProductsEntity>();
+export const productsAdapter: EntityAdapter<Product> =
+  createEntityAdapter<Product>();
 
-export const initialState: State = productsAdapter.getInitialState({
-  action: ProductsActions,
-  loaded: false,
+export const initialState: ProductsData = productsAdapter.getInitialState({
+  error: '',
+  selectedProductId: '',
+  loading: false,
 });
 
 export const productsReducer = createReducer(
@@ -49,17 +44,33 @@ export const productsReducer = createReducer(
     loaded: false,
     error: null,
   })),
-  on(ProductsActions.loadProductsSuccess, (state, { payload: products }) => ({
-    ...state,
-    products: products,
-    loaded: true,
-  })),
-  on(ProductsActions.loadProductsFailure, (state, { error }) => ({
-    ...state,
-    error,
-  }))
+  on(ProductsActions.loadProductsSuccess, (state, { payload: products }) =>
+    productsAdapter.setAll(products, state)
+  ),
+  on(ProductsActions.loadProductsFailure, (state, { error }) =>
+    productsAdapter.removeAll({
+      ...state,
+      error,
+    })
+  )
 );
 
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: ProductsData | undefined, action: Action) {
   return productsReducer(state, action);
 }
+export const getSelectedProductId = (state: ProductsData) =>
+  state.selectedProductId;
+
+export const {
+  // select the array of user ids
+  selectIds: selectProductIds,
+
+  // select the dictionary of Products entities
+  selectEntities: selectProductEntities,
+
+  // select the array of Products
+  selectAll: selectAllProducts,
+
+  // select the total Products count
+  selectTotal: selectProductsTotal
+} = productsAdapter.getSelectors();

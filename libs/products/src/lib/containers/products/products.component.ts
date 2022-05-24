@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsState } from './../../+state/products.reducer';
 import { Store, select } from '@ngrx/store';
-import * as  productsQuery  from './../../+state/products.selectors';
+import { productsQuery } from './../../+state/products.selectors';
 import { Observable } from 'rxjs';
 import { Product } from '@demo-app/data-models';
 import { loadProducts } from './../../+state/products.actions';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'demo-app-products',
@@ -18,6 +19,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(loadProducts());
-    this.products$ = this.store.pipe(select(productsQuery.getAllProducts));
+    this.products$ = this.store.pipe(select(productsQuery.getProducts), tap(console.log));
   }
 }
