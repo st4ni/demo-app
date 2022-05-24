@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsState } from './../../+state/products.reducer';
 import { Store, select } from '@ngrx/store';
-import { productsQuery } from './../../+state/products.selectors';
 import { Observable } from 'rxjs';
 import { Product } from '@demo-app/data-models';
-import { loadProducts } from './../../+state/products.actions';
-import { tap } from 'rxjs';
+import * as ProductsActions from '../../+state/products.actions';
+import { productsQuery } from '../../+state/products.selectors';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'demo-app-products',
@@ -13,12 +13,24 @@ import { tap } from 'rxjs';
   styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
-  products$?: Observable<any[]>;
+  products$?: Observable<Product[]>;
+  selectedProduct$?: Observable<Product>;
 
-  constructor(private store: Store<ProductsState>) {}
+  constructor(private store: Store<ProductsState>, private router: Router) {}
 
   ngOnInit() {
-    this.store.dispatch(loadProducts());
-    this.products$ = this.store.pipe(select(productsQuery.getProducts), tap(console.log));
+    this.store.dispatch(ProductsActions.loadProducts());
+    this.products$ = this.store.pipe(select(productsQuery.getProducts));
+    this.selectedProduct$ = this.store.pipe(
+      select(productsQuery.getSelectedProduct)
+    );
+  }
+
+  updateUrlFilters(category: string): void {
+    const navigationExtras: NavigationExtras = {
+      replaceUrl: true,
+      queryParams: { category },
+    };
+    this.router.navigate([`/products`], navigationExtras);
   }
 }
