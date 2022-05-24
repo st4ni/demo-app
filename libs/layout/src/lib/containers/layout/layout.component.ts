@@ -19,4 +19,8 @@ export class LayoutComponent implements OnInit {
     this.user$ = this.store.select(getUser);
 
   }
+  logout() {
+    localStorage.removeItem('user')
+    console.log('hey');
+  }
 }
