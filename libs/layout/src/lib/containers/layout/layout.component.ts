@@ -3,6 +3,8 @@ import { getUser } from '@demo-app/auth'
 import { Observable } from 'rxjs';
 import { User } from '@demo-app/data-models';
 import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'demo-app-layout',
@@ -12,7 +14,7 @@ import { Store } from '@ngrx/store';
 export class LayoutComponent implements OnInit {
   user$ = new Observable<User>();
 
-  constructor(private readonly store: Store) {}
+  constructor(private readonly store: Store, private router: Router) {}
 
   ngOnInit() {
 
@@ -21,6 +23,7 @@ export class LayoutComponent implements OnInit {
   }
   logout() {
     localStorage.removeItem('user')
+    this.router.navigate([`/auth/login`]);
     console.log('hey');
   }
 }
